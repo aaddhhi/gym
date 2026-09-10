@@ -486,3 +486,305 @@ body{
 .footer-bottom a:hover{
     color:#ffffff;
 }
+
+/* =========================================================
+   NAV TOGGLE (mobile hamburger)
+   ========================================================= */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 34px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 20;
+}
+.nav-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #d2a71b;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* =========================================================
+   ANIMATION KEYFRAMES — each section gets its own signature
+   ========================================================= */
+
+/* Navbar: settles down into place on load */
+@keyframes navSettle {
+    from { transform: translateY(-100%); }
+    to   { transform: translateY(0); }
+}
+
+/* Nav links: brief staggered arrival, not a fade-everything default */
+@keyframes navLinkArrive {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero headline: a curtain-style wipe reveal, left to right */
+@keyframes curtainWipe {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0 0 0); }
+}
+
+/* Hero paragraph + button: rise in after the headline finishes */
+@keyframes riseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero image: diagonal shutter reveal */
+@keyframes shutterReveal {
+    from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+    to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* Service cards: unfold downward from the top edge, like a panel dropping open */
+@keyframes unfoldPanel {
+    from { transform: scaleY(0.15); opacity: 0; }
+    60%  { transform: scaleY(1.04); }
+    to   { transform: scaleY(1); opacity: 1; }
+}
+
+/* Membership cards: a quiet tilt-up from the floor, like a plan being presented */
+@keyframes presentTilt {
+    from { transform: perspective(700px) rotateX(35deg) translateY(30px); opacity: 0; }
+    to   { transform: perspective(700px) rotateX(0deg) translateY(0); opacity: 1; }
+}
+
+/* Contact: info column and form slide toward each other and meet */
+@keyframes slideFromLeft {
+    from { transform: translateX(-40px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideFromRight {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+/* Footer: a line draws itself across the top, then the footer settles in beneath it */
+@keyframes drawLine {
+    from { width: 0; }
+    to   { width: 100%; }
+}
+@keyframes settleUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   APPLYING THE ANIMATIONS
+   ========================================================= */
+
+/* --- Navbar (plays once, on load) --- */
+.navbar {
+    animation: navSettle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    position: relative;
+    overflow: visible;
+    z-index: 100;
+}
+.nav-links a {
+    opacity: 0;
+    animation: navLinkArrive 0.5s ease forwards;
+}
+.nav-links a:nth-child(1) { animation-delay: 0.5s; }
+.nav-links a:nth-child(2) { animation-delay: 0.62s; }
+.nav-links a:nth-child(3) { animation-delay: 0.74s; }
+.nav-links a:nth-child(4) { animation-delay: 0.86s; }
+
+/* --- Hero (plays once, on load) --- */
+.hero-content h1 {
+    animation: curtainWipe 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
+}
+.hero-content p {
+    opacity: 0;
+    animation: riseIn 0.6s ease-out 0.85s both;
+}
+.hero-content .btn {
+    opacity: 0;
+    animation: riseIn 0.6s ease-out 1.05s both;
+}
+.hero-image img {
+    animation: shutterReveal 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.4s both;
+}
+
+/* --- Services: cards unfold, staggered by position, triggered on scroll --- */
+.service-card {
+    opacity: 0;
+    transform-origin: top center;
+}
+.services.in-view .service-card {
+    animation: unfoldPanel 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.services.in-view .service-card:nth-child(1) { animation-delay: 0.05s; }
+.services.in-view .service-card:nth-child(2) { animation-delay: 0.15s; }
+.services.in-view .service-card:nth-child(3) { animation-delay: 0.25s; }
+.services.in-view .service-card:nth-child(4) { animation-delay: 0.35s; }
+.services.in-view .service-card:nth-child(5) { animation-delay: 0.45s; }
+.services.in-view .service-card:nth-child(6) { animation-delay: 0.55s; }
+
+/* --- Membership: cards tilt up into presentation, triggered on scroll --- */
+.membership-card {
+    opacity: 0;
+}
+.membership.in-view .membership-card {
+    animation: presentTilt 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.membership.in-view .membership-card:nth-child(1) { animation-delay: 0.05s; }
+.membership.in-view .membership-card:nth-child(2) { animation-delay: 0.2s; }
+.membership.in-view .membership-card:nth-child(3) { animation-delay: 0.35s; }
+
+/* --- Contact: the two columns move toward each other, triggered on scroll --- */
+.contact-info {
+    opacity: 0;
+}
+.contact-form {
+    opacity: 0;
+}
+.contact.in-view .contact-info {
+    animation: slideFromLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.contact.in-view .contact-form {
+    animation: slideFromRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+/* --- Footer: a line draws across, then the content settles beneath, triggered on scroll --- */
+.footer {
+    position: relative;
+}
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background-color: #d2a71b;
+}
+.footer.in-view::before {
+    animation: drawLine 0.8s ease-out both;
+}
+.footer-container {
+    opacity: 0;
+}
+.footer.in-view .footer-container {
+    animation: settleUp 0.6s ease-out 0.5s both;
+}
+
+/* Respect users who've asked for reduced motion: show everything instantly */
+@media (prefers-reduced-motion: reduce) {
+    .navbar,
+    .nav-links a,
+    .hero-content h1,
+    .hero-content p,
+    .hero-content .btn,
+    .hero-image img,
+    .service-card,
+    .membership-card,
+    .contact-info,
+    .contact-form,
+    .footer-container,
+    .footer::before {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+        width: auto !important;
+    }
+}
+
+/* =========================================================
+   MEDIA QUERIES
+   ========================================================= */
+
+/* ---- Tablets / small laptops (<=1024px) ---- */
+@media (max-width: 1024px) {
+    .hero-content h1 { font-size: 46px; }
+    .hero-content p { font-size: 18px; }
+
+    .service-cards { grid-template-columns: repeat(2, 1fr); }
+    .membership-cards { grid-template-columns: repeat(2, 1fr); }
+
+    .contact-container { grid-template-columns: 1fr; gap: 50px; }
+    .contact-info h2 { font-size: 42px; }
+
+    .footer-container { grid-template-columns: 1fr 1fr; gap: 35px; }
+}
+
+/* ---- Tablets portrait / large phones (<=768px) ---- */
+@media (max-width: 768px) {
+    .nav-toggle { display: flex; }
+
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        flex-direction: column;
+        gap: 0;
+        background-color: #0b0b0b;
+        border-bottom: 1px solid #1a1a1a;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+    }
+    .nav-links.open { max-height: 300px; }
+    .nav-links a {
+        padding: 16px 5%;
+        border-top: 1px solid #1a1a1a;
+        width: 100%;
+        opacity: 1;
+        animation: none;
+    }
+
+    .hero { padding: 60px 5%; min-height: auto; }
+    .hero-container { flex-direction: column-reverse; gap: 35px; text-align: center; }
+    .hero-content h1 { font-size: 38px; }
+    .hero-content p { font-size: 17px; }
+    .hero-image img { height: 300px; }
+
+    .services, .membership { padding: 60px 5%; }
+    .services h2, .membership h2 { font-size: 34px; }
+    .service-cards { grid-template-columns: 1fr; }
+    .membership-cards { grid-template-columns: 1fr; }
+
+    .contact { padding: 70px 5%; }
+    .contact-info h2 { font-size: 34px; }
+    .contact-form { padding: 28px; }
+
+    .footer-container { grid-template-columns: 1fr; text-align: center; }
+    .footer-brand p { margin: 20px auto 25px; }
+    .social-links { justify-content: center; }
+    .footer-links { align-items: center; }
+    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; padding-top: 20px; }
+}
+
+/* ---- Phones (<=480px) ---- */
+@media (max-width: 480px) {
+    .logo { font-size: 20px; }
+
+    .hero-content h1 { font-size: 30px; }
+    .hero-content p { font-size: 15px; }
+    .hero-image img { height: 220px; }
+    .btn { padding: 12px 22px; font-size: 15px; }
+
+    .services h2, .membership h2 { font-size: 26px; }
+    .service-card, .membership-card { padding: 22px; }
+
+    .contact-info h2 { font-size: 26px; }
+    .contact-form { padding: 20px; }
+    .contact-form h2 { font-size: 24px; }
+
+    .footer-container { padding-bottom: 40px; gap: 25px; }
+}
